@@ -1,0 +1,63 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <base href="<%=basePath%>">
+    
+    <title>My JSP '010_combobox.jsp' starting page</title>
+    
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">    
+	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+	<meta http-equiv="description" content="This is my page">
+	<link rel="stylesheet" type="text/css" href="css/common.css" />
+	<script type="text/javascript" src="js/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.2.6/themes/default/easyui.css" />
+	<link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.2.6/themes/icon.css" />
+	<script type="text/javascript" src="js/jquery-easyui-1.2.6/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="js/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript">
+			$(function(){
+				$('#sel_1').combobox({
+					onSelect:function(){
+							var pid = $('#sel_1').combobox('getValue');
+							$('#sel_2').combobox('setValue' , '');//切换省份的时候清空sel2中的值
+							$('#sel_2').combobox('reload' , 'ProvinceServlet?method=getCity&pid='+pid);
+					}
+				});
+				
+				
+				
+				//自动搜索 
+				$('#search').combobox({
+						//data:[{id:1 ,val:'男'},{id:2 ,val:'女'}] ,
+						mode:'remote' ,//设置从服务器端加载数据
+						url:'UserServlet?method=searchName' ,
+						valueField:'id' ,
+						textField:'username' ,
+						delay:1000//1秒往后台发一次请求
+				});
+				
+
+			});
+	
+	</script>
+	
+	
+	
+  </head>
+  
+  <body>
+            <!--  valueField="id" textField="name" 自动映射json中的id和name -->
+    		<select id="sel_1" class="easyui-combobox" url="ProvinceServlet?method=getPro" valueField="id" textField="name"  ></select>
+    		<select id="sel_2" class="easyui-combobox" valueField="id" textField="name" ></select>
+    		<br/>&nbsp;&nbsp;
+    		自动搜索:<input id="search" /><br/>
+  </body>
+</html>
